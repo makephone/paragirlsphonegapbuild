@@ -3,10 +3,10 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://cordova.apache.org/ns/1.0"
-        id        = "com.firebase.produtrealtimeapp"
+        id        = "com.paragirl.produtimeapp"
         version   = "4.0.0">
 
-    <name>Moob</name>
+    <name>Pagagirls</name>
 
     <description>
      Esta e uma simples aplicacao em desenvolvimento
@@ -158,13 +158,7 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-	
-	<universal-links>
-    <host name="calllrestcordova2.page.link" scheme="https" />
-    <host name="realtime-appfff.firebaseio.com" scheme="https">
-        <path url="/__/auth/callback"/>
-    </host>
-</universal-links>
+
 <platform name="android">
 <preference name="AndroidLaunchMode" value="singleTask" />
 </platform>

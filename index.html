@@ -10,10 +10,7 @@
 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <script
-      src="https://code.jquery.com/jquery-3.5.0.js"
-      integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
-      crossorigin="anonymous"></script>
+      <script src="js/jquery-3.5.0.js"   integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>
 
 
   <!--JavaScript at end of body for optimized loading-->
@@ -194,8 +191,13 @@ crossDomain: true
   return true;
 
 }).fail(function (jqXHR,texStatus){
-
- // alert('falha')
+  $('#anterior').hide();
+  $('#proxima').hide();
+  $('#lista').html('<h1 style="color:white;" class="center deep-orange lighten-4" >Falhou</h1><br><a id="req" style="margin-top:100px;" class="waves-effect waves-light btn-large center deep-orange darken-2"><i class="material-icons right">refresh</i>Tentar Novamente! </a>');
+$('#req').click(r);
+function r (){
+   pres(like,page)
+}
     return false;
 });
 
@@ -205,6 +207,7 @@ crossDomain: true
 
 
 async function press(like,page,param){
+
   $("#lista").html("<img src='load.gif' style='margin-top:10px;display: block; margin-left: auto;margin-right: auto;widows: 50%;'> ");
 ajax = await $.ajax({
 url: "https://requestmoobphonegap.herokuapp.com/products/"+like+"/"+page,
@@ -255,11 +258,13 @@ crossDomain: true
 
 }).fail(function (jqXHR,texStatus){
 
-  if(param=="pr"){
-    page++;
-  }else{
-    page--;
-  }
+  $('#anterior').hide();
+  $('#proxima').hide();
+  $('#lista').html('<h1 style="color:white;" class="center deep-orange lighten-4" >Falhou</h1><br><a id="req" style="margin-top:100px;" class="waves-effect waves-light btn-large center deep-orange darken-2"><i class="material-icons right">refresh</i>Tentar Novamente! </a>');
+$('#req').click(r);
+function r (){
+   press(like,page,param)
+}
 
   return false;
     
