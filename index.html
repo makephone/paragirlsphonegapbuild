@@ -1,0 +1,294 @@
+
+  <!doctype html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="icon/icon.css" rel="stylesheet">
+      <!--Import materialize.css-->
+
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <script
+      src="https://code.jquery.com/jquery-3.5.0.js"
+      integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+      crossorigin="anonymous"></script>
+
+
+  <!--JavaScript at end of body for optimized loading-->
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+
+    </head>
+
+    <body style=" background-attachment: fixed;background-image: url(capa.jpg);background-repeat: no-repeat;background-size: cover;">
+        <nav>
+            <div class="nav-wrapper " style="height: 100px;background-image: url(capa.jpg);font-size: 23px;">
+              <a href="#!" class="brand-logo" style="font-size:40px;">Paragirl</a>
+              <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+              </div>
+          </nav>
+        
+          <ul class="sidenav" id="mobile-demo">
+            <li><a href="#">Minha Conta</a></li>
+            <li><a href="#modal1" data-target="modal1" class="modal-trigger">Carrinho</a></li>
+          </ul>
+                  
+
+          <nav>
+            <div class="nav-wrapper" style="background:#37474f ;">
+              <form>
+                <div class="input-field">
+                  <input id="search" type="search" required>
+                  <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                  <div class="material-icons">close</div>
+                </div>
+              </form>
+            </div>
+          </nav>
+
+                        <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Carrinho</h4>
+      <p>seus produtos</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Finalizar</a>
+    </div>
+  </div>
+
+          <div id='lista' style="display: flex;flex-direction: column-reverse;">  
+                                
+         </div>
+
+         
+          <div class="fixed-action-btn" style="left:2%;">
+            <a  id="anterior" class="btn-floating btn-large red">
+              <i class="material-icons">arrow_back</i>
+            </a>
+            </div>
+            <div class="fixed-action-btn ">
+                <a  id="proxima"class="btn-floating btn-large red">
+                  <i class="material-icons">arrow_forward</i>
+                </a>
+                </div>
+                
+                    
+
+  
+    </body>
+  </html>
+  <script type="text/javascript">
+    pagemax=0;
+    page=1;
+    like='vestido';
+    
+    
+    $(document).ready(principal);
+    
+   function principal(){
+    $('.sidenav').sidenav();
+    $('.modal').modal();
+   pres(like,page);
+   $('#search').blur(busca)
+$('#proxima').click(proxPage);
+$('#anterior').click(anterPage);
+
+
+
+function proxPage(){
+  page=page+1;
+  like='vestido'
+  press(like,page,'pr')
+}
+
+function anterPage(){
+  like='vestido'
+  page=page-1;
+  press(like,page,'an')
+}
+
+
+
+
+function busca(){
+like=this.value;
+if(like===""){
+  like='vestido'
+}
+page=1;
+pres(like,page)
+
+
+
+
+
+
+
+
+
+
+}
+
+async function pres(like,page){
+$("#lista").html("<img src='load.gif' style='margin-top:10px;display: block; margin-left: auto;margin-right: auto;widows: 50%;'> ");
+ajax = await $.ajax({
+url: "https://requestmoobphonegap.herokuapp.com/products/"+like+"/"+page,
+dataType: "jsonp" ,
+timeout:'10000',
+async: true,
+jsonpCallback:'jsonCalback' ,
+crossDomain: true
+}).done(function (data){
+  var list="";
+    
+  $.each(data.docs,function (i,value){
+
+    // alert(value.title)
+
+
+
+    list+=' <div class="row ">'
+    list+='<div class="col 7 m3 s6">'
+     list+='<div class="card">'
+      list+='<div class="card-image">'
+      list+='<img class="materialboxed" src="'+value.url+'">'
+      list+='<span class="card-title card-panel brown darken-4">'+value.title+'</span>'
+      if(value.des!=0){
+        list+='<a class="btn-floating halfway-fab waves-effect waves-light red center">'+value.des+'%</a>'
+      }
+     
+      list+='</div>'
+       list+=' <div class="card-content">'
+       list+=' <p>R$'+value.description+'.</p>'
+       list+='<button class="waves-effect waves-light btn red lighten-2">Adicionar</button>'
+       list+='<button class="waves-effect waves-light btn">Comprar</button>'
+       list+=' </div>'
+      list+='</div>'
+    list+='</div>'
+
+
+  });
+
+  if(data.pages==page){
+    $('#proxima').hide();
+  }
+  if(data.pages!=page){
+    $('#proxima').show();
+  }
+
+  if(page==1){
+    $('#anterior').hide()
+  }
+  if(page!=1){
+    $('#anterior').show()
+  }
+
+
+
+         
+  $('#lista').html(list);
+  list="";
+  $('.materialboxed').materialbox();
+  return true;
+
+}).fail(function (jqXHR,texStatus){
+
+ // alert('falha')
+    return false;
+});
+
+};
+
+
+
+
+async function press(like,page,param){
+  $("#lista").html("<img src='load.gif' style='margin-top:10px;display: block; margin-left: auto;margin-right: auto;widows: 50%;'> ");
+ajax = await $.ajax({
+url: "https://requestmoobphonegap.herokuapp.com/products/"+like+"/"+page,
+dataType: "jsonp" ,
+timeout:'10000',
+async: true,
+jsonpCallback:'jsonCalback' ,
+crossDomain: true
+}).done(function (data){
+  var list="";
+    
+  $.each(data.docs,function (i,value){
+
+    // alert(value.title)
+
+
+
+    list+=' <div class="row">'
+      list+='<div class="col 7 m3 s6">'
+     list+='<div class="card">'
+      list+='<div class="card-image">'
+      list+='<img class="materialboxed" src="'+value.url+'">'
+      list+='<span class="card-title card-panel brown darken-4" styled="opacity: 0.5">'+value.title+'</span>'
+      if(value.des!=0){
+        list+='<a class="btn-floating halfway-fab waves-effect waves-light red center">'+value.des+'%</a>'
+      }
+     
+      list+='</div>'
+       list+=' <div class="card-content">'
+       list+=' <p>R$'+value.description+'.</p>'
+       list+='<button class="waves-effect waves-light btn red lighten-2">Adicionar</button>'
+       list+='<button class="waves-effect waves-light btn">Comprar</button>'
+       list+=' </div>'
+      list+='</div>'
+    list+='</div>'
+
+
+  });
+
+  pagemax=data.pages
+
+ 
+         
+  $('#lista').html(list);
+  list="";
+  $('.materialboxed').materialbox();
+  return true;
+
+}).fail(function (jqXHR,texStatus){
+
+  if(param=="pr"){
+    page++;
+  }else{
+    page--;
+  }
+
+  return false;
+    
+});
+
+if (pagemax==page){
+  $('#proxima').hide();
+}
+
+if (pagemax!=page){
+  $('#proxima').show();
+}
+
+if(page>1){
+  $('#anterior').show();
+}
+
+if(page==1){
+  $('#anterior').hide();
+}
+
+
+
+};
+
+
+
+
+   } 
+ 
+  </script>
+        
